@@ -50,9 +50,15 @@ TagManager:
   - name: Ground Detail
     uniqueID: 4199015725
     locked: 0
+  - name: Trap
+    uniqueID: 2408568001
+    locked: 0
   - name: Player
     uniqueID: 3834606129
     locked: 0
   - name: Foreground
     uniqueID: 3454440165
+    locked: 0
+  - name: Floating Ground
+    uniqueID: 1589015505
     locked: 0
