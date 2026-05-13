@@ -4,29 +4,36 @@ public class PlayerJump : MonoBehaviour
 {
     [SerializeField] private Rigidbody2D rigidBody;
     [SerializeField] private Animator animator;
-    [SerializeField] private float jumpForce = 10f; // Biasanya butuh angka lebih kecil (misal 10-20) jika digabungkan dengan rb.velocity
+    [SerializeField] private float jumpForce = 5f;
+    [SerializeField] private float doubleJumpForce = 6f;
     
     private bool isGrounded;
+    private bool canDoubleJump;
 
     void Update()
     {
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
-            Jump();
+            Jump(jumpForce);
+        } else if (Input.GetButtonDown("Jump") && !isGrounded && canDoubleJump)
+        {
+            Jump(doubleJumpForce);
+            canDoubleJump = false;
         }
 
         // Update animator dengan kondisi lompatan
         animator.SetBool("isGrounded", isGrounded);
     }
 
-    void Jump()
+    private void Jump(float force)
     {
         rigidBody.velocity = new Vector2(rigidBody.velocity.x, 0); 
         
-        rigidBody.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
+        rigidBody.AddForce(Vector2.up * force, ForceMode2D.Impulse);
 
         animator.SetTrigger("jump");
         isGrounded = false;
+        canDoubleJump = true;
     }
 
     void OnCollisionEnter2D(Collision2D collision)
