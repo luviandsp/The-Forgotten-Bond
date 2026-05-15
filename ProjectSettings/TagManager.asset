@@ -5,6 +5,7 @@ TagManager:
   serializedVersion: 2
   tags:
   - Ground
+  - Trap
   layers:
   - Default
   - TransparentFX
@@ -62,4 +63,7 @@ TagManager:
     locked: 0
   - name: Floating Ground
     uniqueID: 1589015505
+    locked: 0
+  - name: UI
+    uniqueID: 1468741571
     locked: 0
