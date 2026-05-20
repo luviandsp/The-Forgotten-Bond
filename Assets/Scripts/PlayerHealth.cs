@@ -126,10 +126,27 @@ public class PlayerHealth : MonoBehaviour
 
     private void CheckTrap(Collision2D collision)
     {
-        if (collision.gameObject.CompareTag("Trap"))
+        if (collision.gameObject.CompareTag("Trap") && !isDead)
         {
-            float contactPointX = collision.GetContact(0).point.x;
-            float directionX = transform.position.x < contactPointX ? -1f : 1f;
+            // float contactPointX = collision.GetContact(0).point.x;
+            // float directionX = transform.position.x < contactPointX ? -1f : 1f;
+            // Vector2 knockbackDirection = new Vector2(directionX, 0);
+            // TakeDamage(1, knockbackDirection);
+
+            float directionX = 0.1f;
+            if (rb.velocity.x > 0.1f)
+            {
+                directionX = -1f;
+            }
+            else if (rb.velocity.x < -0.1f)
+            {
+                directionX = 1f;
+            } 
+            else
+            {
+                directionX = spriteRenderer.flipX ? 1f : -1f;
+            }
+
             Vector2 knockbackDirection = new Vector2(directionX, 0);
             TakeDamage(1, knockbackDirection);
         }
