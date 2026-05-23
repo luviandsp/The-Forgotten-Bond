@@ -2,20 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
 public class EnemyMovement : MonoBehaviour
 {
     // ============================================================
     //  PATROL SETTINGS
     // ============================================================
     [Header("Patrol Settings")]
-
-    [Tooltip("Kecepatan enemy saat berjalan patrol")]
     [SerializeField] private float patrolSpeed = 2f;
-
-    [Tooltip("Jarak maksimal patrol ke kiri dan kanan dari posisi spawn")]
     [SerializeField] private float patrolDistance = 5f;
-
-    [Tooltip("Berapa lama musuh diam (Idle) di ujung patroli sebelum balik arah (dalam detik)")]
     [SerializeField] private float patrolWaitTime = 2f;
 
     // ============================================================
@@ -26,6 +21,28 @@ public class EnemyMovement : MonoBehaviour
     [SerializeField] private float detectionRange = 6f;
     [SerializeField] private float losePlayerRange = 9f;
     [SerializeField] private LayerMask playerLayer;
+
+    // ============================================================
+    //  ATTACK SETTINGS (RANDOM VERSION)
+    // ============================================================
+    [Header("Attack Settings")]
+    [Tooltip("Jarak musuh mulai berhenti mengejar dan bersiap memukul")]
+    [SerializeField] private float attackRange = 1.2f;
+
+    [Tooltip("Jeda waktu istirahat musuh setelah selesai memukul (detik)")]
+    [SerializeField] private float attackCooldown = 1.5f;
+
+    [Tooltip("Radius lingkaran titik pukul hitbox musuh")]
+    [SerializeField] private float attackHitboxRadius = 0.5f;
+
+    [Tooltip("Titik depan musuh tempat hantaman pukulan keluar")]
+    [SerializeField] private Transform attackPoint;
+
+    [Tooltip("Durasi satu animasi pukulan (detik). Hitung: jumlah frame ÷ Samples. Contoh Attack_Onre_1: 4 frame ÷ 12 fps = 0.35f")]
+    [SerializeField] private float singleAttackDuration = 0.35f;
+
+    private float nextAttackTime = 0f;
+    private bool isAttacking = false;
 
     // ============================================================
     //  RAYCAST SETTINGS
@@ -52,16 +69,9 @@ public class EnemyMovement : MonoBehaviour
     private int moveDirection = 1;
     private Transform playerTransform;
 
-    private enum EnemyState
-    {
-        Patrol,
-        Chase,
-        Waiting // State baru saat musuh diam di ujung
-    }
-
+    private enum EnemyState { Patrol, Chase, Waiting, Attack }
     private EnemyState currentState = EnemyState.Patrol;
-    private bool isWaitingAtEdge = false; // Flag biar Co-routine gak kepanggil berkali-kali
-
+    private bool isWaitingAtEdge = false;
 
     private void Awake()
     {
@@ -85,18 +95,22 @@ public class EnemyMovement : MonoBehaviour
 
     private void FixedUpdate()
     {
+        // Jika sedang memukul, paksa fisik musuh diam total di tempat
+        if (currentState == EnemyState.Attack)
+        {
+            rb.velocity = new Vector2(0f, rb.velocity.y);
+            return;
+        }
+
         switch (currentState)
         {
             case EnemyState.Patrol:
                 HandlePatrol();
                 break;
-
             case EnemyState.Chase:
                 HandleChase();
                 break;
-
             case EnemyState.Waiting:
-                // Saat menunggu, pastikan kecepatan horizontal bener-bener nol
                 rb.velocity = new Vector2(0f, rb.velocity.y);
                 break;
         }
@@ -108,20 +122,90 @@ public class EnemyMovement : MonoBehaviour
 
         float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
 
-        // Player masuk ke detection range -> switch ke mode Chase
+        // 1. CEK REAL-TIME: JIKA MASUK JARAK SERANG & COOLDOWN HABIS -> MASUK STATE ATTACK
+        if (distanceToPlayer <= attackRange && Time.time >= nextAttackTime && !isAttacking)
+        {
+            StartCoroutine(AttackRandomSequence());
+            return;
+        }
+
+        if (isAttacking) return;
+
+        // 2. DETEKSI CHASE / PATROL
         if (distanceToPlayer <= detectionRange)
         {
             if (currentState != EnemyState.Chase)
             {
-                // SOLUSI BUG: Hentikan co-routine nunggu secara paksa dan reset flag-nya langsung!
                 StopAllCoroutines();
                 isWaitingAtEdge = false;
-
                 currentState = EnemyState.Chase;
             }
         }
-        // Player keluar dari lose range -> switch kembali ke mode Patrol
         else if (currentState == EnemyState.Chase && distanceToPlayer > losePlayerRange)
+        {
+            currentState = EnemyState.Patrol;
+        }
+    }
+
+    /// <summary>
+    /// Coroutine untuk mengacak jenis pukulan, memutar animasi, dan mengirim damage.
+    /// Timeline: [0%] Trigger animasi -> [30%] Hitbox aktif -> [100%] Reset & selesai.
+    /// </summary>
+    private IEnumerator AttackRandomSequence()
+    {
+        isAttacking = true;
+        currentState = EnemyState.Attack;
+
+        // Pilih animasi serangan secara acak (1, 2, atau 3)
+        int chosenAttackIndex = Random.Range(1, 4);
+
+        // Tentukan kapan musuh boleh menyerang lagi setelah coroutine ini selesai
+        nextAttackTime = Time.time + singleAttackDuration + attackCooldown;
+
+        // Trigger animasi serangan di Animator
+        if (animator != null)
+        {
+            animator.SetInteger("attackIndex", chosenAttackIndex);
+        }
+
+        // Jeda tunggal: hitbox aktif tepat di 30% dari total durasi animasi
+        float delayBeforeDamage = singleAttackDuration * 0.3f;
+        yield return new WaitForSeconds(delayBeforeDamage);
+
+        // Cek dan aplikasikan damage ke player via OverlapCircle
+        Vector3 hitboxPos = attackPoint != null
+            ? attackPoint.position
+            : transform.position + new Vector3(moveDirection * 0.7f, 0f, 0f);
+
+        Collider2D hitPlayer = Physics2D.OverlapCircle(hitboxPos, attackHitboxRadius, playerLayer);
+        if (hitPlayer != null)
+        {
+            PlayerHealth targetHealth = hitPlayer.GetComponent<PlayerHealth>();
+            if (targetHealth != null)
+            {
+                float directionX = playerTransform.position.x > transform.position.x ? 1f : -1f;
+                targetHealth.TakeDamage(1, new Vector2(directionX, 0f));
+            }
+        }
+
+        // Tunggu sisa 70% durasi animasi hingga benar-benar selesai diputar
+        yield return new WaitForSeconds(singleAttackDuration - delayBeforeDamage);
+
+        // Reset parameter Animator setelah animasi selesai
+        if (animator != null)
+        {
+            animator.SetInteger("attackIndex", 0);
+        }
+
+        isAttacking = false;
+
+        // Tentukan state berikutnya berdasarkan jarak ke player
+        if (playerTransform != null)
+        {
+            float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
+            currentState = distanceToPlayer <= losePlayerRange ? EnemyState.Chase : EnemyState.Patrol;
+        }
+        else
         {
             currentState = EnemyState.Patrol;
         }
@@ -131,30 +215,27 @@ public class EnemyMovement : MonoBehaviour
     {
         if (animator == null) return;
 
+        // Jika sedang menyerang, kunci parameter agar tidak dibajak oleh Idle/Walk
+        if (currentState == EnemyState.Attack)
+        {
+            animator.SetBool("isChasing", true);
+            animator.SetBool("isWalking", false);
+            return;
+        }
+
         if (currentState == EnemyState.Chase)
         {
-            // SOLUSI BUG: Saat mengejar, paksa 'isChasing' TRUE dan kunci 'isWalking' wajib FALSE
             animator.SetBool("isChasing", true);
             animator.SetBool("isWalking", false);
         }
         else if (currentState == EnemyState.Patrol)
         {
-            // Saat patroli, pastikan lari mati
             animator.SetBool("isChasing", false);
-
-            // 'isWalking' HANYA boleh true kalau dia emang lagi gerak pas patroli
-            if (Mathf.Abs(rb.velocity.x) > 0.1f)
-            {
-                animator.SetBool("isWalking", true);
-            }
-            else
-            {
-                animator.SetBool("isWalking", false);
-            }
+            animator.SetBool("isWalking", Mathf.Abs(rb.velocity.x) > 0.1f);
         }
         else if (currentState == EnemyState.Waiting)
         {
-            // Saat diam menunggu di ujung, matikan semua arah gerakan biar balik ke IDLE
+            // Saat nunggu di ujung patroli, kembali ke Idle sepenuhnya
             animator.SetBool("isChasing", false);
             animator.SetBool("isWalking", false);
         }
@@ -163,50 +244,36 @@ public class EnemyMovement : MonoBehaviour
     private void HandlePatrol()
     {
         bool shouldWait = false;
+        if (!IsGroundAhead() || IsWallAhead()) shouldWait = true;
 
-        // Cek hambatan
-        if (!IsGroundAhead() || IsWallAhead())
-            shouldWait = true;
-
-        // Cek batas jarak
         float offsetFromStart = transform.position.x - startPosition.x;
         bool reachedRightLimit = moveDirection > 0 && offsetFromStart >= patrolDistance;
         bool reachedLeftLimit  = moveDirection < 0 && offsetFromStart <= -patrolDistance;
 
-        if (reachedRightLimit || reachedLeftLimit)
-            shouldWait = true;
+        if (reachedRightLimit || reachedLeftLimit) shouldWait = true;
 
-        // Jika menyentuh ujung dan belum masuk mode nunggu
         if (shouldWait && !isWaitingAtEdge)
         {
             StartCoroutine(WaitAtEdgeRoutine());
             return;
         }
 
-        // Jalankan musuh jika sedang tidak menunggu
         if (currentState == EnemyState.Patrol)
         {
             rb.velocity = new Vector2(moveDirection * patrolSpeed, rb.velocity.y);
         }
     }
 
-    /// <summary>
-    /// Co-routine untuk menahan musuh di posisi ujung
-    /// </summary>
     private IEnumerator WaitAtEdgeRoutine()
     {
         isWaitingAtEdge = true;
-        currentState = EnemyState.Waiting; // Pindah ke state diam
-        rb.velocity = new Vector2(0f, rb.velocity.y); // Stop rem mendadak
-
-        // Tunggu sesuai detik yang diinput di Inspector
+        currentState = EnemyState.Waiting;
+        rb.velocity = new Vector2(0f, rb.velocity.y);
         yield return new WaitForSeconds(patrolWaitTime);
 
-        // Setelah selesai nunggu, balik arah baru jalan lagi
         moveDirection *= -1;
         FlipSprite();
-
-        currentState = EnemyState.Patrol; // Balik ke mode jalan
+        currentState = EnemyState.Patrol;
         isWaitingAtEdge = false;
     }
 
@@ -223,14 +290,8 @@ public class EnemyMovement : MonoBehaviour
             FlipSprite();
         }
 
-        if (IsWallAhead())
-        {
-            rb.velocity = new Vector2(0f, rb.velocity.y);
-        }
-        else
-        {
-            rb.velocity = new Vector2(moveDirection * chaseSpeed, rb.velocity.y);
-        }
+        if (IsWallAhead()) rb.velocity = new Vector2(0f, rb.velocity.y);
+        else rb.velocity = new Vector2(moveDirection * chaseSpeed, rb.velocity.y);
     }
 
     private bool IsGroundAhead()
@@ -242,16 +303,13 @@ public class EnemyMovement : MonoBehaviour
             float halfWidth = spriteRenderer != null ? spriteRenderer.bounds.extents.x : 0.5f;
             origin = (Vector2)transform.position + new Vector2(moveDirection * halfWidth, -0.1f);
         }
-        RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.down, edgeCheckDistance, groundLayer);
-        return hit.collider != null;
+        return Physics2D.Raycast(origin, Vector2.down, edgeCheckDistance, groundLayer).collider != null;
     }
 
     private bool IsWallAhead()
     {
         Vector2 origin = wallCheckPoint != null ? (Vector2)wallCheckPoint.position : (Vector2)transform.position;
-        Vector2 direction = Vector2.right * moveDirection;
-        RaycastHit2D hit = Physics2D.Raycast(origin, direction, wallCheckDistance, groundLayer);
-        return hit.collider != null;
+        return Physics2D.Raycast(origin, Vector2.right * moveDirection, wallCheckDistance, groundLayer).collider != null;
     }
 
     private void FlipSprite()
@@ -263,13 +321,16 @@ public class EnemyMovement : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Vector3 patrolCenter = Application.isPlaying ? (Vector3)startPosition : transform.position;
+
+        Gizmos.color = Color.red;
+        Vector3 hitboxPos = attackPoint != null ? attackPoint.position : transform.position + new Vector3(moveDirection * 0.7f, 0f, 0f);
+        Gizmos.DrawWireSphere(hitboxPos, attackHitboxRadius);
+
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, detectionRange);
         Gizmos.color = new Color(1f, 0.5f, 0f);
         Gizmos.DrawWireSphere(transform.position, losePlayerRange);
         Gizmos.color = Color.cyan;
-        Vector3 leftBound  = patrolCenter + Vector3.left  * patrolDistance;
-        Vector3 rightBound = patrolCenter + Vector3.right * patrolDistance;
-        Gizmos.DrawLine(leftBound, rightBound);
+        Gizmos.DrawLine(patrolCenter + Vector3.left * patrolDistance, patrolCenter + Vector3.right * patrolDistance);
     }
 }
