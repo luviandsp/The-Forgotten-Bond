@@ -203,9 +203,10 @@ GameObject:
   - component: {fileID: 172165870}
   - component: {fileID: 172165869}
   - component: {fileID: 172165868}
+  - component: {fileID: 172165873}
   m_Layer: 0
   m_Name: Enemy_Gotoku
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -396,6 +397,24 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &172165873
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 172165866}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53acbc92869e9274dbfad8dd3fd26749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 0
+  maxHealth: 3
+  knockbackForceX: 4
+  knockbackForceY: 3
+  invincibilityDuration: 0.4
+  knockbackDuration: 0.3
 --- !u!1 &172698485
 GameObject:
   m_ObjectHideFlags: 0
@@ -9443,9 +9462,10 @@ GameObject:
   - component: {fileID: 344363886}
   - component: {fileID: 344363885}
   - component: {fileID: 344363884}
+  - component: {fileID: 344363890}
   m_Layer: 0
   m_Name: Enemy_Onre
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -9636,6 +9656,24 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1369249156}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &344363890
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 344363883}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53acbc92869e9274dbfad8dd3fd26749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 0
+  maxHealth: 3
+  knockbackForceX: 4
+  knockbackForceY: 3
+  invincibilityDuration: 0.4
+  knockbackDuration: 0.3
 --- !u!1 &519420028
 GameObject:
   m_ObjectHideFlags: 0
@@ -15053,9 +15091,10 @@ GameObject:
   - component: {fileID: 722208501}
   - component: {fileID: 722208500}
   - component: {fileID: 722208499}
+  - component: {fileID: 722208504}
   m_Layer: 0
   m_Name: Enemy_Yurei
-  m_TagString: Untagged
+  m_TagString: Enemy
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15246,6 +15285,24 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &722208504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 722208497}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53acbc92869e9274dbfad8dd3fd26749, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentHealth: 0
+  maxHealth: 3
+  knockbackForceX: 4
+  knockbackForceY: 3
+  invincibilityDuration: 0.4
+  knockbackDuration: 0.3
 --- !u!1 &926809618
 GameObject:
   m_ObjectHideFlags: 0
@@ -32972,6 +33029,7 @@ GameObject:
   - component: {fileID: 1535639275}
   - component: {fileID: 1535639280}
   - component: {fileID: 1535639281}
+  - component: {fileID: 1535639282}
   m_Layer: 7
   m_Name: Player
   m_TagString: Player
@@ -32991,7 +33049,8 @@ Transform:
   m_LocalPosition: {x: -8.17, y: 0.34, z: 0}
   m_LocalScale: {x: 0.85, y: 0.85, z: 0.85}
   m_ConstrainProportionsScale: 1
-  m_Children: []
+  m_Children:
+  - {fileID: 1918127960}
   m_Father: {fileID: 1369249156}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &1535639275
@@ -33177,6 +33236,23 @@ MonoBehaviour:
   knockbackForceX: 2
   knockbackForceY: 3
   invincibilityDuration: 2
+--- !u!114 &1535639282
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1535639273}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b7045ee388548784bb80b6c0456b9d50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 1535639278}
+  attackPoint: {fileID: 1918127960}
+  attackRange: 1.25
+  attackDamage: 1
+  attackCooldown: 0.5
 --- !u!1 &1610638329
 GameObject:
   m_ObjectHideFlags: 0
@@ -33706,6 +33782,37 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1918127959
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1918127960}
+  m_Layer: 7
+  m_Name: AttackPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1918127960
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1918127959}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1535639274}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
