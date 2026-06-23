@@ -6,8 +6,9 @@ public class MainMenuController : MonoBehaviour
     // Fungsi untuk tombol Play
     public void PlayGame()
     {
-        // Akan memuat scene bernama "StageOne"
-        SceneManager.LoadScene("StageOne");
+
+        // Akan memuat scene IntroCutscene
+        SceneManager.LoadScene("IntroCutscene");
     }
 
     // Fungsi untuk tombol Quit
