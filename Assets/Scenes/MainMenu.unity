@@ -331,6 +331,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42b3253712ddf5c4fa1d149047f2dcb0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  introSceneName: IntroCutscene
+  gameplaySceneName: StageOne
 --- !u!1 &239192982
 GameObject:
   m_ObjectHideFlags: 0
@@ -3126,7 +3128,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 228001264}
         m_TargetAssemblyTypeName: MainMenuController, Assembly-CSharp
-        m_MethodName: PlayGame
+        m_MethodName: LoadSavedGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
