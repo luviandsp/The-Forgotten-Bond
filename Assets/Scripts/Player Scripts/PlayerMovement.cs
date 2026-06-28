@@ -12,9 +12,26 @@ public class PlayerMovement : MonoBehaviour
     private float xPosLastFrame;
 
     public int moveDirection { get; private set; } = 1;
+    public bool isAttacking = false;
+    
+    // Penanda status shield
+    public bool isShielding = false;
 
     void Update()
     {
+        // Deteksi input tahan tombol shield (misal: klik kanan / "Fire2")
+        isShielding = Input.GetButton("Fire2"); 
+        
+        // Kirim status shield ke Animator
+        if (animator != null) animator.SetBool("isShielding", isShielding);
+
+        // Jika player sedang menyerang ATAU menahan shield, hentikan gerakan
+        if (isAttacking || isShielding)
+        {
+            animator.SetBool("isRunning", false);
+            return; 
+        }
+
         HandleMovement();
         FlipCharacterX();
     }
@@ -26,12 +43,12 @@ public class PlayerMovement : MonoBehaviour
         if (input > 0 && (transform.position.x > xPosLastFrame))
         {
             spriteRenderer.flipX = false;
-            moveDirection = 1; // Update arah ke kanan
+            moveDirection = 1;
         }
         else if (input < 0 && (transform.position.x < xPosLastFrame))
         {
             spriteRenderer.flipX = true;
-            moveDirection = -1; // Update arah ke kiri
+            moveDirection = -1;
         }
 
         xPosLastFrame = transform.position.x;
@@ -43,13 +60,6 @@ public class PlayerMovement : MonoBehaviour
         movement.x = input * speed * Time.deltaTime;
         transform.Translate(movement);
 
-        if (input != 0)
-        {
-            animator.SetBool("isRunning", true);
-        }
-        else
-        {
-            animator.SetBool("isRunning", false);
-        }
+        animator.SetBool("isRunning", input != 0);
     }
 }

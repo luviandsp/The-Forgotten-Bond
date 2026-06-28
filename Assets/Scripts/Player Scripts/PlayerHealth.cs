@@ -47,6 +47,13 @@ public class PlayerHealth : MonoBehaviour
     {
         if (isInvincible || isDead) return;
 
+        // --- TAMBAHKAN LOGIKA SHIELD DI SINI ---
+        if (PlayerMovement != null && PlayerMovement.isShielding)
+        {
+            // Tahan damage. Anda bisa menambahkan efek suara "ting" atau partikel shield di sini.
+            return; 
+        }
+
         currentHealth -= damage;
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         onHealthChanged?.Invoke();

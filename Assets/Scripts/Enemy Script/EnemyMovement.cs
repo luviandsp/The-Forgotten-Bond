@@ -115,21 +115,30 @@ public class EnemyMovement : MonoBehaviour
                 break;
         }
     }
-
     private void UpdateDetection()
     {
         if (playerTransform == null) return;
+        
+        // Pindahkan pengecekan ini ke atas agar jika sedang memukul, logika di bawahnya tidak mengganggu
+        if (isAttacking) return;
 
         float distanceToPlayer = Vector2.Distance(transform.position, playerTransform.position);
 
-        // 1. CEK REAL-TIME: JIKA MASUK JARAK SERANG & COOLDOWN HABIS -> MASUK STATE ATTACK
-        if (distanceToPlayer <= attackRange && Time.time >= nextAttackTime && !isAttacking)
+        // 1. JIKA MASUK JARAK SERANG (Di depan player persis)
+        if (distanceToPlayer <= attackRange)
         {
-            StartCoroutine(AttackRandomSequence());
-            return;
+            if (Time.time >= nextAttackTime)
+            {
+                // Cooldown habis, siap memukul
+                StartCoroutine(AttackRandomSequence());
+            }
+            else
+            {
+                // Cooldown belum habis, masuk ke state Waiting (Diam di tempat)
+                currentState = EnemyState.Waiting;
+            }
+            return; // Hentikan fungsi di sini agar tidak lanjut ke logika Chase
         }
-
-        if (isAttacking) return;
 
         // 2. DETEKSI CHASE / PATROL
         if (distanceToPlayer <= detectionRange)

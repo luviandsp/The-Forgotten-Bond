@@ -8,16 +8,18 @@ public class AktorMenu : MonoBehaviour
 
     [Header("Pengaturan Animasi")]
     public Animator animator;
+    
+    [Tooltip("Ketik nama parameter lari yang sesuai (contoh: isRunning atau isChasing)")]
+    public string parameterLari = "isRunning"; 
 
     private bool sudahSampai = false;
 
-    // TAMBAHKAN BAGIAN INI
     void Start()
     {
         if (animator != null)
         {
-            // Menyalakan animasi lari sejak awal scene dimulai
-            animator.SetBool("isRunning", true); 
+            // Menyalakan animasi lari menggunakan variabel nama parameter
+            animator.SetBool(parameterLari, true); 
         }
     }
 
@@ -34,8 +36,8 @@ public class AktorMenu : MonoBehaviour
             
             if (animator != null)
             {
-                // Mematikan animasi lari (kembali ke Idle)
-                animator.SetBool("isRunning", false); 
+                // Mematikan animasi lari menggunakan variabel nama parameter
+                animator.SetBool(parameterLari, false); 
             }
         }
     }
