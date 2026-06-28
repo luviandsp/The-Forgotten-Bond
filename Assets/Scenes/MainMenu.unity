@@ -3871,6 +3871,7 @@ MonoBehaviour:
   titikBerhentiX: -4
   kecepatan: 2
   animator: {fileID: 1429563914}
+  parameterLari: isRunning
 --- !u!1 &1572580363
 GameObject:
   m_ObjectHideFlags: 0
@@ -4024,6 +4025,7 @@ MonoBehaviour:
   titikBerhentiX: 6.5
   kecepatan: 2
   animator: {fileID: 1608951818}
+  parameterLari: isChasing
 --- !u!70 &1608951816
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -4096,7 +4098,7 @@ Animator:
   m_GameObject: {fileID: 1608951813}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 6b6364988f3144f4e9baedb9fa1261a9, type: 2}
+  m_Controller: {fileID: 9100000, guid: 1d434205d82333148b0af19eb72bf60c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 4d0bf9789b7a0db4da1f1bf615e1f963
+guid: 0e6d6ca0d6cdd954b9a212f322117552
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -48,7 +48,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 32
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -97,13 +97,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Walk_0
+      name: HealthBar DARK_0
       rect:
         serializedVersion: 2
-        x: 42
-        y: 0
-        width: 28
-        height: 80
+        x: 19
+        y: 147
+        width: 57
+        height: 7
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -111,20 +111,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1fbec6f501163dc48b729aa171d8847a
-      internalID: -207267158
+      spriteID: 19a2454226a8ac543af8527ecc13b601
+      internalID: 2053325724
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Walk_1
+      name: HealthBar DARK_1
       rect:
         serializedVersion: 2
-        x: 170
-        y: 0
-        width: 35
-        height: 80
+        x: 23
+        y: 150
+        width: 58
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -132,20 +132,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1ff1650b449e08a4fa238fe083dee0cb
-      internalID: -1776328134
+      spriteID: 11aeb903c63bc004b91b2c572d4554e7
+      internalID: 1987036668
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Walk_2
+      name: HealthBar DARK_2
       rect:
         serializedVersion: 2
-        x: 298
-        y: 0
-        width: 34
-        height: 80
+        x: 18
+        y: 134
+        width: 64
+        height: 10
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -153,20 +153,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: e2349e432c4cf62439c06ab3cee4c5da
-      internalID: 2123217991
+      spriteID: 5211291f6e1b5a8439ba35a49a6195bc
+      internalID: -694851711
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Walk_3
+      name: HealthBar DARK_3
       rect:
         serializedVersion: 2
-        x: 426
-        y: 0
-        width: 25
-        height: 80
+        x: 9
+        y: 100
+        width: 76
+        height: 20
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -174,20 +174,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 7b0eb75e8fe68b44ca809d3f86e24948
-      internalID: 857393047
+      spriteID: 3556c1331ee4a0a4c883e33d35c36da1
+      internalID: 608152057
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Walk_4
+      name: HealthBar DARK_4
       rect:
         serializedVersion: 2
-        x: 554
-        y: 0
-        width: 27
-        height: 80
+        x: 28
+        y: 119
+        width: 56
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -195,20 +195,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d9680e5327b56ff45a9ecad099fc1f02
-      internalID: 1557218875
+      spriteID: a32359f07e089104fbba0f4a09bdeb4e
+      internalID: -1455933242
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Walk_5
+      name: HealthBar DARK_5
       rect:
         serializedVersion: 2
-        x: 683
-        y: 0
-        width: 35
-        height: 80
+        x: 9
+        y: 71
+        width: 76
+        height: 20
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -216,20 +216,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 324be91f4e593574da7cb8f850d968eb
-      internalID: 2120606055
+      spriteID: 16556ea14f3b16c459de80be423202d8
+      internalID: -1546138188
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Walk_6
+      name: HealthBar DARK_6
       rect:
         serializedVersion: 2
-        x: 810
-        y: 0
-        width: 35
-        height: 80
+        x: 28
+        y: 90
+        width: 56
+        height: 4
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -237,20 +237,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 08102763478dea8408d263e6becaa5f9
-      internalID: -1275029121
+      spriteID: 6b3e5187806d0ee4292104f244002e14
+      internalID: -622256008
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Walk_7
+      name: HealthBar DARK_7
       rect:
         serializedVersion: 2
-        x: 938
-        y: 0
-        width: 28
-        height: 80
+        x: 18
+        y: 57
+        width: 59
+        height: 10
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -258,8 +258,71 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 4d16c48325687d04a81b7a57d3853e87
-      internalID: 726551865
+      spriteID: 2c1ee08e831300a4c872fd021c81fdf7
+      internalID: -1114811713
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: HealthBar DARK_8
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 42
+        width: 61
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: eec3bfdfaaeda2b4ea1f3493af07088a
+      internalID: 1933140800
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BossHP_Fill
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 24
+        width: 61
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: a697843ccb1fcde44b844c836ca93319
+      internalID: -1514170996
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: BossHP_Background
+      rect:
+        serializedVersion: 2
+        x: 17
+        y: 11
+        width: 61
+        height: 10
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f5587bac77c29a8439b8030fadeb322f
+      internalID: -1660265279
       vertices: []
       indices: 
       edges: []
@@ -275,14 +338,17 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     nameFileIdTable:
-      Walk_0: -207267158
-      Walk_1: -1776328134
-      Walk_2: 2123217991
-      Walk_3: 857393047
-      Walk_4: 1557218875
-      Walk_5: 2120606055
-      Walk_6: -1275029121
-      Walk_7: 726551865
+      BossHP_Background: -1660265279
+      BossHP_Fill: -1514170996
+      HealthBar DARK_0: 2053325724
+      HealthBar DARK_1: 1987036668
+      HealthBar DARK_2: -694851711
+      HealthBar DARK_3: 608152057
+      HealthBar DARK_4: -1455933242
+      HealthBar DARK_5: -1546138188
+      HealthBar DARK_6: -622256008
+      HealthBar DARK_7: -1114811713
+      HealthBar DARK_8: 1933140800
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
