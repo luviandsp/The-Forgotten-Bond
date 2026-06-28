@@ -118,7 +118,30 @@ public class PlayerHealth : MonoBehaviour
 
     void Respawn()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        // 1. Reset status mati dan darah kembali penuh
+        isDead = false;
+        currentHealth = maxHealth;
+        onHealthChanged?.Invoke();
+
+        // 2. Nyalakan kembali kontrol pergerakan
+        if (PlayerMovement != null) PlayerMovement.enabled = true;
+        if (PlayerJump != null) PlayerJump.enabled = true;
+
+        // 3. Reset sistem animasi agar tidak tersangkut di gaya mati
+        animator.Rebind();
+        animator.Update(0f);
+
+        // 4. Panggil sistem checkpoint untuk pindah lokasi
+        PlayerRespawn respawnSystem = GetComponent<PlayerRespawn>();
+        if (respawnSystem != null)
+        {
+            respawnSystem.DieAndRespawn();
+        }
+        else
+        {
+            // Cadangan: kalau script PlayerRespawn belum dipasang, baru restart level
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        }
     }
 
     private void OnCollisionStay2D(Collision2D collision)
@@ -157,5 +180,14 @@ public class PlayerHealth : MonoBehaviour
             Vector2 knockbackDirection = new Vector2(directionX, 0);
             TakeDamage(1, knockbackDirection);
         }
+    }
+
+    public void HealthReset()
+    {
+        currentHealth = maxHealth;
+        isDead = false; // Memastikan status kematian dibatalkan
+        
+        // Memanggil UI agar menggambar ulang hatinya menjadi penuh
+        onHealthChanged?.Invoke(); 
     }
 }

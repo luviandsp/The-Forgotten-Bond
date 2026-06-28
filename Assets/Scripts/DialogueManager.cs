@@ -38,6 +38,18 @@ public class DialogueManager : MonoBehaviour
 
     void Start()
     {
+        // CHECKPOINT LOAD BYPASS: Check if the game is loaded from a checkpoint
+        if (PlayerPrefs.GetInt("LoadGame", 0) == 1 && PlayerPrefs.GetInt("HasCheckpoint", 0) == 1)
+        {
+            // Force hide both the dialogue panel and tutorial canvas
+            if (dialoguePanel != null) dialoguePanel.SetActive(false);
+            if (canvasTutorial != null) canvasTutorial.SetActive(false);
+            
+            isDialogueActive = false;
+            return; // Exit the function early so StartDialogue() never runs
+        }
+
+        // Normal sequence (New Game / Standard entry)
         if (canvasTutorial != null)
         {
             canvasTutorial.SetActive(false);
