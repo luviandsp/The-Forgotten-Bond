@@ -11,6 +11,8 @@ public class PlayerMovement : MonoBehaviour
     private Vector2 movement;
     private float xPosLastFrame;
 
+    public int moveDirection { get; private set; } = 1;
+
     void Update()
     {
         HandleMovement();
@@ -24,10 +26,12 @@ public class PlayerMovement : MonoBehaviour
         if (input > 0 && (transform.position.x > xPosLastFrame))
         {
             spriteRenderer.flipX = false;
+            moveDirection = 1; // Update arah ke kanan
         }
         else if (input < 0 && (transform.position.x < xPosLastFrame))
         {
             spriteRenderer.flipX = true;
+            moveDirection = -1; // Update arah ke kiri
         }
 
         xPosLastFrame = transform.position.x;

@@ -11,6 +11,7 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private Animator animator;
     [Tooltip("Titik pusat lingkaran area serangan (buat empty GameObject di depan player)")]
     [SerializeField] private Transform attackPoint;
+    [SerializeField] private PlayerMovement playerMovement;
 
     // ============================================================
     //  PENGATURAN SERANGAN
@@ -20,7 +21,16 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private int attackDamage = 1;
     [SerializeField] private float attackCooldown = 0.5f;
 
+    [Tooltip("Jarak geser hitbox ke depan player jika attackPoint kosong")]
+    [SerializeField] private float attackOffsetDistance = 0.7f;
+
     private float nextAttackTime = 0f;
+
+    private void Awake()
+    {
+        // Otomatis mencari PlayerMovement jika belum dimasukkan di Inspector
+        if (playerMovement == null) playerMovement = GetComponent<PlayerMovement>();
+    }
 
     void Update()
     {
@@ -45,8 +55,13 @@ public class PlayerAttack : MonoBehaviour
             animator.SetTrigger("attack");
         }
 
-        // 2. Tentukan titik pusat serangan (fallback ke posisi player jika attackPoint belum diisi)
-        Vector2 hitPosition = attackPoint != null ? (Vector2)attackPoint.position : (Vector2)transform.position;
+        // Ambil arah pergerakan dari PlayerMovement (jika ada, fallback ke 1 jika null)
+        int currentDir = playerMovement != null ? playerMovement.moveDirection : 1;
+
+        // 2. Tentukan titik pusat serangan
+        Vector2 hitPosition = attackPoint != null 
+            ? (Vector2)attackPoint.position 
+            : (Vector2)transform.position + new Vector2(currentDir * attackOffsetDistance, 0f);
 
         // 3. Deteksi semua collider 2D yang berada di dalam lingkaran serangan
         Collider2D[] hitObjects = Physics2D.OverlapCircleAll(hitPosition, attackRange);
@@ -73,9 +88,13 @@ public class PlayerAttack : MonoBehaviour
     // Fitur visual untuk membantu melihat jarak pukul (hitbox) di dalam Unity Editor
     private void OnDrawGizmosSelected()
     {
-        if (attackPoint == null) return;
+        int currentDir = playerMovement != null ? playerMovement.moveDirection : 1;
+        
+        Vector3 hitPosition = attackPoint != null 
+            ? attackPoint.position 
+            : transform.position + new Vector3(currentDir * attackOffsetDistance, 0f, 0f);
         
         Gizmos.color = Color.red;
-        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        Gizmos.DrawWireSphere(hitPosition, attackRange);
     }
 }
