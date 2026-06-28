@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -31,6 +32,12 @@ public class PlayerAttack : MonoBehaviour
 
     void Update()
     {
+        // 1. Jika game di-pause (waktu berhenti), hentikan pembacaan input
+        if (Time.timeScale == 0f) return;
+
+        // 2. Jika kursor mouse sedang menunjuk/mengklik UI, hentikan pembacaan input
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject()) return;
+
         // Kembalikan combo ke 1 jika jeda serangan terlalu lama
         if (Time.time - lastAttackTime > comboResetTime && !playerMovement.isAttacking)
         {
