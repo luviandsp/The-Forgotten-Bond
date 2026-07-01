@@ -8,6 +8,11 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private SpriteRenderer spriteRenderer;
     [SerializeField] private Animator animator;
 
+    [Header("Audio")]
+    [SerializeField] private AudioClip defendEffect;
+    private AudioSource audioSource;
+    private bool wasShielding = false;
+
     private Vector2 movement;
     private float xPosLastFrame;
 
@@ -17,10 +22,25 @@ public class PlayerMovement : MonoBehaviour
     // Penanda status shield
     public bool isShielding = false;
 
+    void Start()
+    {
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
+    }
+
     void Update()
     {
         // Deteksi input tahan tombol shield (misal: klik kanan / "Fire2")
-        isShielding = Input.GetButton("Fire2"); 
+        isShielding = Input.GetButton("Fire2");
+
+        // Play defend sound sekali saat mulai shielding
+        if (isShielding && !wasShielding)
+        {
+            if (audioSource != null && defendEffect != null)
+                audioSource.PlayOneShot(defendEffect);
+        }
+        wasShielding = isShielding;
         
         // Kirim status shield ke Animator
         if (animator != null) animator.SetBool("isShielding", isShielding);

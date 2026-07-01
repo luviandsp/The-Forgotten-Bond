@@ -21,6 +21,10 @@ public class PlayerHealth : MonoBehaviour
     public float invincibilityDuration = 1.5f;
     private float knockbackDuration = 0.6f;
     private bool isInvincible = false;
+    [Header("Audio")]
+    public AudioClip deathSound;
+    public AudioClip hurtSound;
+    private AudioSource audioSource;
     private bool isDead = false;
     // Start is called before the first frame update
     void Start()
@@ -33,6 +37,11 @@ public class PlayerHealth : MonoBehaviour
         PlayerMovement = GetComponent<PlayerMovement>();
         PlayerJump = GetComponent<PlayerJump>();
         animator = GetComponent<Animator>();
+
+        // Setup AudioSource untuk death sound
+        audioSource = GetComponent<AudioSource>();
+        if (audioSource == null)
+            audioSource = gameObject.AddComponent<AudioSource>();
     }
 
     void Update()
@@ -58,8 +67,15 @@ public class PlayerHealth : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth, 0, maxHealth);
         onHealthChanged?.Invoke();
 
+        // Play hurt sound
         if (currentHealth > 0)
         {
+            // Play hurt sound hanya jika masih hidup
+            if (audioSource != null && hurtSound != null)
+            {
+                audioSource.PlayOneShot(hurtSound);
+            }
+        
             StartCoroutine(HurtSequence(knockbackDirection));
         }
         else
@@ -106,6 +122,7 @@ public class PlayerHealth : MonoBehaviour
     {
         if (isDead) return;
         isDead = true;
+        Debug.Log("[PlayerHealth] Die() called!");
 
         if (PlayerMovement != null) PlayerMovement.enabled = false;
         if (PlayerJump != null) PlayerJump.enabled = false;
@@ -113,34 +130,34 @@ public class PlayerHealth : MonoBehaviour
         rb.velocity = Vector2.zero; // Stop movement
         animator.SetTrigger("dead");
 
-        Invoke(nameof(Respawn), 2f);
+        // --- AUDIO ---
+        // 1. Stop BGM
+        GameObject bgmObj = GameObject.Find("BGM_Manager");
+        if (bgmObj != null)
+        {
+            AudioSource bgm = bgmObj.GetComponent<AudioSource>();
+            if (bgm != null) bgm.Stop();
+        }
+
+        // 2. Play death sound
+        if (audioSource != null && deathSound != null)
+        {
+            audioSource.PlayOneShot(deathSound);
+        }
+
+        // Delay sebelum tampilkan panel, supaya animasi mati sempat jalan
+        Debug.Log("[PlayerHealth] Invoking ShowGameOverPanel in 1.5s...");
+        Invoke(nameof(ShowGameOverPanel), 1.5f);
     }
 
-    void Respawn()
+    void ShowGameOverPanel()
     {
-        // 1. Reset status mati dan darah kembali penuh
-        isDead = false;
-        currentHealth = maxHealth;
-        onHealthChanged?.Invoke();
-
-        // 2. Nyalakan kembali kontrol pergerakan
-        if (PlayerMovement != null) PlayerMovement.enabled = true;
-        if (PlayerJump != null) PlayerJump.enabled = true;
-
-        // 3. Reset sistem animasi agar tidak tersangkut di gaya mati
-        animator.Rebind();
-        animator.Update(0f);
-
-        // 4. Panggil sistem checkpoint untuk pindah lokasi
-        PlayerRespawn respawnSystem = GetComponent<PlayerRespawn>();
-        if (respawnSystem != null)
+        Debug.Log("[PlayerHealth] ShowGameOverPanel() called!");
+        GameOverPanel gameOverPanel = FindObjectOfType<GameOverPanel>();
+        Debug.Log("[PlayerHealth] FindObjectOfType<GameOverPanel> = " + (gameOverPanel != null ? "FOUND" : "NULL"));
+        if (gameOverPanel != null)
         {
-            respawnSystem.DieAndRespawn();
-        }
-        else
-        {
-            // Cadangan: kalau script PlayerRespawn belum dipasang, baru restart level
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+            gameOverPanel.ShowGameOver();
         }
     }
 
