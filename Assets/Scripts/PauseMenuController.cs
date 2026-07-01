@@ -47,6 +47,13 @@ public class PauseMenuController : MonoBehaviour
 
     public void PauseGame()
     {
+        // Reset position to center in case it was placed off-screen
+        RectTransform rt = pauseMenuPanel.GetComponent<RectTransform>();
+        if (rt != null)
+        {
+            rt.anchoredPosition = Vector2.zero;
+        }
+
         pauseMenuPanel.SetActive(true);
         Time.timeScale = 0f; // Freeze everything (physics, animations, updates)
         isGamePaused = true;
