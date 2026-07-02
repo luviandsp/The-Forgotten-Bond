@@ -29,6 +29,9 @@ public class BossHealth : MonoBehaviour
     private bool isInvincible = false;
     private bool isDead = false;
 
+    [Header("Ending Cutscene")]
+    [SerializeField] private BossEndingCutscene endingCutscene;
+
     // ============================================================
     //  COMPONENTS
     // ============================================================
@@ -141,6 +144,14 @@ public class BossHealth : MonoBehaviour
         Collider2D col = GetComponent<Collider2D>();
         if (col != null) col.enabled = false;
 
-        Destroy(gameObject, 3f); // Boss butuh waktu lebih lama untuk hancur
+        // Trigger ending cutscene if assigned
+        if (endingCutscene != null)
+        {
+            endingCutscene.PlayEndingCutscene();
+        }
+        else
+        {
+            Destroy(gameObject, 3f);
+        }
     }
 }
