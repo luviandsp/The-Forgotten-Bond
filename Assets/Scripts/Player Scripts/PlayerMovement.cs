@@ -18,6 +18,8 @@ public class PlayerMovement : MonoBehaviour
 
     public int moveDirection { get; private set; } = 1;
     public bool isAttacking = false;
+    // kunci gerakan saat dialog aktif
+    public static bool canMove = true;
     
     // Penanda status shield
     public bool isShielding = false;
@@ -45,13 +47,12 @@ public class PlayerMovement : MonoBehaviour
         // Kirim status shield ke Animator
         if (animator != null) animator.SetBool("isShielding", isShielding);
 
-        // Jika player sedang menyerang ATAU menahan shield, hentikan gerakan
-        if (isAttacking || isShielding)
+        // Jika dialog aktif / menyerang / shield → hentikan gerakan
+        if (!canMove || isAttacking || isShielding)
         {
             animator.SetBool("isRunning", false);
-            return; 
+            return;
         }
-
         HandleMovement();
         FlipCharacterX();
     }
