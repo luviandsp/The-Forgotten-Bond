@@ -46,6 +46,7 @@ public class DialogueManager : MonoBehaviour
             if (canvasTutorial != null) canvasTutorial.SetActive(false);
             
             isDialogueActive = false;
+            PlayerMovement.canMove = true;
             return; // Exit the function early so StartDialogue() never runs
         }
 
@@ -70,6 +71,8 @@ public class DialogueManager : MonoBehaviour
     {
         isDialogueActive = true;
         dialoguePanel.SetActive(true);
+        // Kunci gerakan player
+        PlayerMovement.canMove = false;
         currentIndex = 0;
 
         DisplayNextSentence();
@@ -114,6 +117,8 @@ public class DialogueManager : MonoBehaviour
     {
         isDialogueActive = false;
         dialoguePanel.SetActive(false);
+        // Buka gerakan player lagi
+        PlayerMovement.canMove = true;
 
         // Munculkan Canvas Tutorial setelah dialog selesai
         if (canvasTutorial != null)
