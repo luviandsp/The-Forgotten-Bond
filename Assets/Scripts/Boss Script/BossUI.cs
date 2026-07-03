@@ -40,11 +40,11 @@ public class BossUI : MonoBehaviour
     private void UpdateHealthBar()
     {
         if (healthFillImage == null || bossHealth == null) return;
+        if (bossHealth.maxHealth <= 0) return; // Mencegah crash jika maxHealth 0
 
-        // Hitung persentase nyawa (hasilnya antara 0.0f hingga 1.0f)
+        // Hitung persentase nyawa (0.0f hingga 1.0f)
         float fillAmount = (float)bossHealth.currentHealth / bossHealth.maxHealth;
         
-        // Ubah visual bar merah di UI
         healthFillImage.fillAmount = fillAmount;
     }
 }
