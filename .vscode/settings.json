@@ -56,5 +56,5 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "The Forgotten Bond.sln"
+    "dotnet.defaultSolution": "The-Forgotten-Bond.sln"
 }

@@ -6,15 +6,18 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/SplashScreen.unity
+    guid: 21fff5c08c36b684abb2197f6ab2a541
+  - enabled: 1
     path: Assets/Scenes/MainMenu.unity
     guid: 7967d4b386b52af47967a85de396c258
+  - enabled: 1
+    path: Assets/Scenes/IntroCutscene.unity
+    guid: 9f7dfc327da4b1f45944879cbe0deb1f
   - enabled: 1
     path: Assets/Scenes/StageOne.unity
     guid: 8c9cfa26abfee488c85f1582747f6a02
   - enabled: 1
     path: Assets/Scenes/StageBossFight.unity
     guid: 3d6bc24e27e873a45a207780c3cb5c7b
-  - enabled: 1
-    path: Assets/Scenes/IntroCutscene.unity
-    guid: 9f7dfc327da4b1f45944879cbe0deb1f
   m_configObjects: {}
