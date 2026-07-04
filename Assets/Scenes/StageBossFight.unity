@@ -10405,6 +10405,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fbd4479dc18f982489aef5659d867c52, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  videoFileName: Ending_Cutscene.webm
   cutsceneCanvas: {fileID: 1172711095}
   videoPlayer: {fileID: 1172711098}
   videoRawImage: {fileID: 858034614}
@@ -10435,7 +10436,7 @@ VideoPlayer:
   m_TargetMaterialProperty: <noninit>
   m_RenderMode: 2
   m_AspectRatio: 2
-  m_DataSource: 0
+  m_DataSource: 1
   m_TimeUpdateMode: 2
   m_PlaybackSpeed: 1
   m_AudioOutputMode: 2

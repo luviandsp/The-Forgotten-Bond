@@ -6,6 +6,15 @@ using UnityEngine.SceneManagement;
 
 public class BossEndingCutscene : MonoBehaviour
 {
+// Tambahkan satu variabel di paling atas kelas untuk nama file video kamu
+    [Header("WebGL Specific")]
+    [Tooltip("Nama file video di folder StreamingAssets beserta ekstensinya, contoh: Ending_Cutscene.webm")]
+    public string videoFileName = "Ending_Cutscene.webm"; // Sesuaikan dengan nama file aslimu
+
+    [Header("Player Reference")]
+    [Tooltip("Masukkan script pergerakan/input player kamu di sini")]
+    public MonoBehaviour playerMovementScript;
+
     [Header("UI Panels")]
     public GameObject cutsceneCanvas;
 
@@ -51,6 +60,10 @@ public class BossEndingCutscene : MonoBehaviour
         {
             videoPlayer.playOnAwake = false;
             videoPlayer.isLooping = false;
+            
+            // ISI URL SECARA DINAMIS DI SINI UNTUK WEBGL
+            videoPlayer.source = VideoSource.Url;
+            videoPlayer.url = System.IO.Path.Combine(Application.streamingAssetsPath, videoFileName);
         }
 
         // Cache BGM AudioSource
@@ -74,6 +87,12 @@ public class BossEndingCutscene : MonoBehaviour
         if (cutsceneCanvas != null)
             cutsceneCanvas.SetActive(true);
 
+        // FREEZE PLAYER: Matikan script input/movement player agar klik kiri/kanan tidak trigger moveset
+        if (playerMovementScript != null)
+        {
+            playerMovementScript.enabled = false;
+        }
+
         StartCoroutine(CutsceneSequence());
     }
 
@@ -93,28 +112,30 @@ public class BossEndingCutscene : MonoBehaviour
         yield return new WaitForSecondsRealtime(1f);
 
         // === PLAY VIDEO ===
-        // Hide overlay BEHIND video — overlay off, video on
         SetOverlay(false);
         if (videoPlayer != null && videoRawImage != null)
         {
             videoRawImage.gameObject.SetActive(true);
 
-            // Ensure video renders ON TOP of overlay
             Canvas videoCanvas = videoRawImage.GetComponentInParent<Canvas>();
             if (videoCanvas != null)
             {
                 videoCanvas.sortingOrder = 200;
             }
 
-            videoPlayer.Play();
+            // Siapkan video terlebih dahulu
+            videoPlayer.Prepare();
 
-            // Wait until video is prepared
+            // Tunggu hingga browser selesai meload video (Prepare)
             float timeout = 5f;
             while (!videoPlayer.isPrepared && timeout > 0)
             {
                 timeout -= Time.unscaledDeltaTime;
                 yield return null;
             }
+
+            // Baru jalankan setelah dipastikan isPrepared = true
+            videoPlayer.Play();
 
             // Wait for video to finish
             bool videoDone = false;
