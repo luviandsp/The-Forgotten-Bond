@@ -11,6 +11,10 @@ public class BossEndingCutscene : MonoBehaviour
     [Tooltip("Nama file video di folder StreamingAssets beserta ekstensinya, contoh: Ending_Cutscene.webm")]
     public string videoFileName = "Ending_Cutscene.webm"; // Sesuaikan dengan nama file aslimu
 
+    [Header("Player Reference")]
+    [Tooltip("Masukkan script pergerakan/input player kamu di sini")]
+    public MonoBehaviour playerMovementScript;
+
     [Header("UI Panels")]
     public GameObject cutsceneCanvas;
 
@@ -82,6 +86,12 @@ public class BossEndingCutscene : MonoBehaviour
     {
         if (cutsceneCanvas != null)
             cutsceneCanvas.SetActive(true);
+
+        // FREEZE PLAYER: Matikan script input/movement player agar klik kiri/kanan tidak trigger moveset
+        if (playerMovementScript != null)
+        {
+            playerMovementScript.enabled = false;
+        }
 
         StartCoroutine(CutsceneSequence());
     }
