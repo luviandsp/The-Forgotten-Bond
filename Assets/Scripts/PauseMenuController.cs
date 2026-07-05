@@ -27,6 +27,20 @@ public class PauseMenuController : MonoBehaviour
         // Toggle pause when pressing the Escape key
         if (Input.GetKeyDown(KeyCode.Escape))
         {
+            // Do not allow pausing or resuming if the game is over
+            GameOverPanel gameOver = FindObjectOfType<GameOverPanel>();
+            if (gameOver != null && gameOver.IsGameOver)
+            {
+                return;
+            }
+
+            // Do not allow pausing if the player is dead (e.g. during death animation)
+            PlayerHealth playerHealth = FindObjectOfType<PlayerHealth>();
+            if (playerHealth != null && playerHealth.IsDead)
+            {
+                return;
+            }
+
             if (isGamePaused)
             {
                 ResumeGame();

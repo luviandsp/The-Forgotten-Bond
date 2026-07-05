@@ -15,6 +15,8 @@ public class GameOverPanel : MonoBehaviour
 
     private bool isGameOver = false;
 
+    public bool IsGameOver => isGameOver;
+
     void Start()
     {
         // Setup AudioSource

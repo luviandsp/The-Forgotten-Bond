@@ -26,6 +26,8 @@ public class PlayerHealth : MonoBehaviour
     public AudioClip hurtSound;
     private AudioSource audioSource;
     private bool isDead = false;
+
+    public bool IsDead => isDead;
     // Start is called before the first frame update
     void Start()
     {
